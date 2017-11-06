@@ -10,8 +10,7 @@ int main() {
 
 	imagem = fopen(nome_imagem, "r");//Abre o arquivo de leitura da imagem
 	if (imagem == NULL) {
-		printf("Erro na abertura do arquivo %s\n", nome_imagem);
-		//stderr (fprintf(stderr,"msg de erro"))
+		fprintf(stderr,"Arquivo nao esta no formato PPM!");
 		return 0;
 	}
 
