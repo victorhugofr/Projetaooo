@@ -60,9 +60,8 @@ void ler_arq (FILE *arquivo, Imagem *m) {
 	// 	if (strcmp(str_check[0], '#') != 0) {
 	// 		//fscanf(arquivo, "%s", formato);
 	// 		formato = str_check;
-	// 		if (strcmp(formato, "P3") != 0) {
-	// 			printf("Arquivo nao esta no formato PPM!");//mensagem de erro tem q ir pelo canal
-	// 			//stderr (fprintf(stderr,"msg de erro"))
+	// 		if (strcmp(formato, "P3") != 0
+	// 			fprintf(stderr,"Arquivo nao esta no formato PPM!");
 	// 			fclose(arquivo);
 	// 			exit(1);
 	// 		}
@@ -70,8 +69,7 @@ void ler_arq (FILE *arquivo, Imagem *m) {
 	// 	else 
 			fscanf(arquivo, "%s", formato);
 			if (strcmp(formato, "P3") != 0) {
-				printf("Arquivo nao esta no formato PPM!");//mensagem de erro tem q ir pelo canal
-				//stderr (fprintf(stderr,"msg de erro"))
+				fprintf(stderr,"Arquivo nao esta no formato PPM!");
 				fclose(arquivo);
 				exit(1);
 			}
