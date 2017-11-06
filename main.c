@@ -1,3 +1,4 @@
+#include "imagem.h"
 int main() {
 	FILE *imagem;//Ponteiro para o arquivo que contem a imagem de entrada
 	FILE *nova_imagem;//Ponteiro para o arquivo onde sera salva imagem resultante
