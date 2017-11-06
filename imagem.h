@@ -1,6 +1,11 @@
 #ifndef NaoImporta_h
 #define NaoImporta_h
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
 typedef struct {
 	unsigned short int r, g, b; //tons vermelho, verde e azul de cada pixel
 } Pixel;
