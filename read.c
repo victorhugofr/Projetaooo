@@ -3,7 +3,7 @@
 
 //FUNCAO DE LEITURA DE ARQUIVO, IDENTIFICACAO DA IMAGEM(CABECALHO E PIXELS) E RETIRADA DE COMENTARIOS
 void ler_arq (FILE *arquivo, Imagem *m) {
-	char header[3];
+	char header[5];
 	unsigned int i,j;
 	char str_check[73];//Variavel para checar se ha '#'
 	unsigned int a;
@@ -15,8 +15,9 @@ void ler_arq (FILE *arquivo, Imagem *m) {
 			fgets(str_check, 71, arquivo);
 		}
 		else {
-			if (strcmp(str_check, "P3") != 0) {
-				fprintf(stderr,"Erro");
+			strcpy(m->header, str_check);
+			if (strcmp(m->header, "P3") != 0) {
+				fprintf(stderr,"Erro\n");
 				fclose(arquivo);
 				exit(1);
 			}
