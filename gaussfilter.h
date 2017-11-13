@@ -3,6 +3,6 @@
 
 #include "imagem.h"
 
-Imagem *GaussFilter (Imagem *m);
+Imagem *GaussFilter (Imagem *m, int blurtimes);
 
 #endif
