@@ -1,11 +1,13 @@
 main: imagem.o read.o grey.o
-	gcc main.c imagem.c read.c grey.c gaussfilter.c -o proj_modulado -lm
+	gcc main.c imagem.c read.c grey.c gaussfilter.c sobelfilter.c -o proj_modulado -lm
 
 imagem.o: imagem.h
 
 read.o: read.h
 
 grey.o: grey.h
+
+sobelfilter.o: sobelfilter.h
 
 gaussfilter.o: gaussfilter.h
 
