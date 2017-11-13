@@ -3,6 +3,6 @@
 
 #include "imagem.h"
 
-void make_PPM_cinza (Imagem *m);
+Imagem* make_PPM_cinza (Imagem *m);
 
 #endif
