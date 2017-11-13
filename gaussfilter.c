@@ -3,6 +3,9 @@
 
 //FUNCAO DE APLICACAO DO FILTRO GAUSSIANO NA IMAGEM
 Imagem *GaussFilter (Imagem *m, int blurtimes) {
+	if (blurtimes < 1) {
+		fprintf(stderr, "ERRO: Nao pode borrar a imagem %d vezes!\n", blurtimes);
+	}
 
 	int filter[5][5] = {{2,4,5,4,2}, {4,9,12,9,4}, {5,12,15,12,5}, {4,9,12,9,4}, {2,4,5,4,2}};//Filtro Gaussiano
 	unsigned int i,j,k,l;
@@ -32,11 +35,12 @@ Imagem *GaussFilter (Imagem *m, int blurtimes) {
 
 	if (blurtimes > 1) {
 		GaussImage = GaussFilter(GaussImage, blurtimes -1);
+		printf("A imagem foi borrada um total de %d vezes!\n", blurtimes);
 	}
 	else if (blurtimes == 1) {
-		printf("ok");
+		printf("A imagem foi borrada 1 vez!\n");
 	}
-	printf("%hu %hu %hu\n", GaussImage->M[0][6].r, GaussImage->M[0][6].g, GaussImage->M[0][6].b);
 
+	freeImagem(m);
 	return GaussImage;
 }
