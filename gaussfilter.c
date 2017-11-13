@@ -2,44 +2,41 @@
 #include "gaussfilter.h"
 
 //FUNCAO DE APLICACAO DO FILTRO GAUSSIANO NA IMAGEM
-Imagem* GaussFilter (Imagem *m) {
+Imagem *GaussFilter (Imagem *m, int blurtimes) {
 
-	int filter[5][5] = {{2,4,5,4,2},{4,9,12,9,4},{5,12,15,12,5},{4,9,12,9,4},{2,4,5,4,2}};//Filtro Gaussiano
+	int filter[5][5] = {{2,4,5,4,2}, {4,9,12,9,4}, {5,12,15,12,5}, {4,9,12,9,4}, {2,4,5,4,2}};//Filtro Gaussiano
 	unsigned int i,j,k,l;
-	int aux=0,div=0;//Variaveis de auxilio para o calculo
-	unsigned short int g_aux;
+	double aux=0;//Variaveis de auxilio para o calculo
 
-	Imagem *GaussImage;
-	GaussImage = malloc(sizeof(Imagem));
-	GaussImage->M = alocar_espaco_para_matriz_de_pixels(m->altura, m->largura);//Alocando o espaço para a matriz de Pixels da imagem pós filtro
-
+	Imagem *GaussImage = criarImagem(m->altura, m->largura, m->max);
 	strcpy(GaussImage->header, m->header);
-	GaussImage->altura = m->altura;
-	GaussImage->largura = m->largura;
-	GaussImage->max = m->max;
 
 	for (i=0; i < m->altura; i++) {
 		for (j=0; j < m->largura; j++) {
-			for (k = -2; k <=2; k++) {
-				for (l = -2; l <= 2; l++) {
-					if ( (i+k < 0) || (j+l < 0) || (i+k >= m->altura) || (j+l >= m->largura) ) {
+			aux = 0;
+			for (k=0; k < 5; k++) {
+				for (l=0; l < 5; l++) {
+					if ( (i+k-2 < 0) || (j+l-2 < 0) || (i+k-2 >= m->altura) || (j-2+l >= m->largura) ) {
 						continue;
 					} 
 
-					aux += m->M[i+k][j+l].r * filter[k+2][l+2];
-					div += filter[k+2][l+2];
+					aux += (double) (m->M[i+k-2][j+l-2].r * filter[k][l])/159;
 				}
 			}
-			g_aux = (unsigned short int) aux/div;
-			aux = 0;
-			div = 0;
-			GaussImage->M[i][j].r = g_aux; //(unsigned short int) aux/div;
-			GaussImage->M[i][j].g = g_aux;//(unsigned short int) aux/div;
-			GaussImage->M[i][j].b = g_aux;//(unsigned short int) aux/div;
+			GaussImage->M[i][j].r = aux;
+			GaussImage->M[i][j].g = aux;
+			GaussImage->M[i][j].b = aux;
 
 		}
 	}
-	printf("%hu %hu %hu\n", GaussImage->M[i][j].r, GaussImage->M[i][j].g, GaussImage->M[i][j].b);
+
+	if (blurtimes > 1) {
+		GaussImage = GaussFilter(GaussImage, blurtimes -1);
+	}
+	else if (blurtimes == 1) {
+		printf("ok");
+	}
+	printf("%hu %hu %hu\n", GaussImage->M[0][6].r, GaussImage->M[0][6].g, GaussImage->M[0][6].b);
 
 	return GaussImage;
 }
