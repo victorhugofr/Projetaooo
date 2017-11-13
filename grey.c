@@ -2,7 +2,7 @@
 #include "grey.h"
 
 //FUNCAO DE CONVERSAO DA IMAGEM EM TONS DE CINZA
-void make_PPM_cinza (Imagem *m) {
+Imagem* make_PPM_cinza (Imagem *m) {
 	unsigned int i,j;
 	int temp;
 
@@ -19,4 +19,5 @@ void make_PPM_cinza (Imagem *m) {
 			(m->M[i][j]).b = temp;
 		}
 	}
+	return m;
 }
