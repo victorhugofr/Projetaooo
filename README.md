@@ -32,3 +32,5 @@ Para compilar:
 	
 Informações adicionais:
 	Acesse o arquivo makefile para orientações de 'clean'
+	
+#Ajeitar a segmentação do flash em Extra2.ppm
