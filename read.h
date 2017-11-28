@@ -1,8 +1,9 @@
-#ifndef Talvez_h
-#define Talvez_h
+#ifndef Talvezzzz_h
+#define Talvezzzz_h
 
-#include "imagem.h"
+#include "uteis.h"
 
-void ler_arq (FILE *arquivo, Imagem *m);
+//Funcao de leitura de arquivo, identificacao da imagem (cabecalho e pixels) e retirada de comentarios
+Imagem *ler_img(char *documento);
 
 #endif
