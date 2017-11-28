@@ -1,11 +1,23 @@
 #include "read.h"
 
-//FUNCAO DE LEITURA DE ARQUIVO, IDENTIFICACAO DA IMAGEM(CABECALHO E PIXELS) E RETIRADA DE COMENTARIOS
-void ler_arq (FILE *arquivo, Imagem *m) {
-	unsigned int i,j;
-	char str_check[73];//Variavel para checar se ha '#'
-	unsigned int a;
+//Funcao de leitura de arquivo, identificacao da imagem(cabecalho e pixels) e retirada de comentarios
+Imagem *ler_img(char *filename) {
+	FILE *arquivo;
+	char *formato = calloc(4,sizeof(char));//Essa variavel serve somente para guardar o formato de uma imagem, para poder repassar essa informacao depois
+	unsigned int i,j,a;
+	char *str_check = calloc(73,sizeof(char));//Variavel para checar se ha '#'
+	unsigned int altura, largura, max;
 
+	char *real_filename = calloc(strlen(filename) + 5,sizeof(char));//Considerando a pasta com as imagens, devo adiciona-la ao nome da imagem
+	sprintf(real_filename, "in/%s", filename);
+	Imagem *m;// Criando minha variavel de controle de imagens
+
+	arquivo = fopen(real_filename, "r");
+	if (arquivo == NULL) {
+		fprintf(stderr, "Erro de abertura de imagem\n");
+		exit(1);
+	}
+	
 	//Agora ler os dados contidos no cabecalho
 	while (5 < 8) { //Aqui eu checo se existem comentarios antes da informacao do header. Se existirem, eu os pulo ate chegar no header
 		fscanf(arquivo, "%s", str_check);
@@ -13,16 +25,16 @@ void ler_arq (FILE *arquivo, Imagem *m) {
 			fgets(str_check, 71, arquivo);
 		}
 		else {
-			strcpy(m->header, str_check);
+			strcpy(formato, str_check);
 			if (strcmp(str_check, "P3") != 0) {
-				fprintf(stderr,"Fudeu meu bom!");
+				fprintf(stderr,"ERRO:Formato de imagem diferente!\n");
 				fclose(arquivo);
 				exit(1);
 			}
 			break;
 		}
 	}
-	
+
 	while(5 < 8) {  //Aqui eu checo se existem comentarios entre a linha que informa header, e a linha que informa largura e altura. Se existirem, eu os pulo ate chegar na linha de largura e altura
 		fscanf(arquivo, "%s", str_check);
 		if (str_check[0] == '#') {
@@ -30,15 +42,15 @@ void ler_arq (FILE *arquivo, Imagem *m) {
 		}
 		else {
 			a = strlen(str_check);
-			m->largura = 0; //A largura (em pixels) da imagem
+			largura = 0; //A largura (em pixels) da imagem
 			for (i=0, j=a-1; i<a; i++, j--) { //Como a largura (um unsigned int) foi salva no str_check(uma string de char), preciso converter para obter minha largura
-				m->largura += (unsigned int) (str_check[i] - 48) * pow(10,j);//Convertendo o valor do caracter para um valor decimal (de acordo com a tabela ASCII)
+				largura += (unsigned int) (str_check[i] - 48) * pow(10,j);//Convertendo o valor do caracter para um valor decimal (de acordo com a tabela ASCII)
 			}
 			break;
 		}
 	}
 
-	fscanf(arquivo, " %u", &(m->altura));//A altura (em pixels) da imagem
+	fscanf(arquivo, " %u", &altura);//A altura (em pixels) da imagem
 
 	while (5 < 8) { //Aqui eu checo se existem comentarios entre a linha de lagura e altura, e a linha do max. Se existirem, eu os pulo ate chegar na linha que me informa o max
 		fscanf(arquivo, "%s", str_check);
@@ -47,15 +59,16 @@ void ler_arq (FILE *arquivo, Imagem *m) {
 		}
 		else {
 			a = strlen(str_check);
-			m->max = 0; //Valor maximo de um tom de cor
+			max = 0; //Valor maximo de um tom de cor
 			for (i=0, j=a-1; i<a; i++, j--) { //Como o max (um unsigned int) foi salvo no str_check(uma string de char), preciso converter para obter meu max
-				m->max += (int) (str_check[i] - 48) * pow(10,j); //Convertendo o valor do caracter para um valor decimal (de acordo com a tabela ASCII)
+				max += (unsigned int) (str_check[i] - 48) * pow(10,j); //Convertendo o valor do caracter para um valor decimal (de acordo com a tabela ASCII)
 			}
 		break;
 		}
 	}
 
-	m->M = alocar_espaco_para_matriz_de_pixels(m->altura, m->largura);
+	m = criarImagem(altura, largura, max);
+	strcpy(m->header, formato);
 
 	unsigned short int temp;
 
@@ -70,5 +83,8 @@ void ler_arq (FILE *arquivo, Imagem *m) {
 		}
 	}
 
+	free(formato);
+	free(str_check);
 	fclose(arquivo);
+	return m;
 }
